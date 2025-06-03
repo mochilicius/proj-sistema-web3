@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golfinho Azul</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='features/logo1.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="oceanoHeader">
+        <nav class="navegacaoContainer">
+            <div class="logoContainer">
+                    <img src="{{ url_for('static', filename='features/logotext.svg') }}" class="logo"/>
+            </div>
+            <div class="navegacaoButton">
+            {% if current_user.is_authenticated %}
+                <div class="profileDropdown">
+                    <button class="profileBtn">
+                        <div class="profileIcon" style="--profile-color: {{ current_user.profile_color }}; --profile-color-dark: {{ current_user.profile_color }}"></div>
+                        Meu Perfil
+                    </button>
+                    <div class="dropdownContent">
+                        <a href="{{ url_for('login')}}">Dashboard</a>
+                        <a href="{{ url_for('alterar_dados') }}">Alterar Dados</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="navegacaoBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="navegacaoBtn"><i class="fas fa-user-plus"></i> Registrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <div class="sliderContainer">
+        <div class="slider">
+            <div class="slide fade">
+                 <video class="video-slide" autoplay loop muted>
+          <source src="{{ url_for('static', filename='features/Golfinho.mp4') }}" type="video/mp4">
+        </video>
+            </div>
+            <div class="slide fade">
+                <video class="video-slide" autoplay loop muted>
+          <source src="{{ url_for('static', filename='features/animaisMarinhoss.mp4') }}" type="video/mp4">
+        </video>
+            </div>
+            <div class="slide fade">
+                <video class="video-slide" autoplay loop muted>
+          <source src="{{ url_for('static', filename='features/contatos.mp4') }}" type="video/mp4">
+        </video>
+            </div>
+
+            <button class="sliderBtn prev" onclick="changeSlide(-1)" title="Slide anterior" aria-label="Slide anterior"><i class="fas fa-chevron-left"></i></button>
+            <button class="sliderBtn next" onclick="changeSlide(1)" title="Próximo slide" aria-label="Próximo slide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="sliderDots">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </div>
+
+    <section class="about">
+        <div class="aboutContainer">
+            <h2>Sobre Nós</h2>
+            <div class="aboutContent">
+                <div class="aboutText">
+                    <p>Somos uma <b>organização não governamental</b> dedicada à cuidado de 🐬<b>animais marinhos</b>🐬. Nossa missão é cuidar de todos os animais através de um <b>tratamento especializado!</b></p>
+                    <p>Trabalhamos em parceria com <b>voluntários</b> e <b>veterinários</b> para <b>fornecer cuidados de saúde de qualidade.</b></p>
+                </div>
+                <div class="aboutStats">
+                    <div class="statItem">
+                        <i class="fas fa-water"></i>
+                        <h3>Animais Cadastrados</h3>
+                        <p>Mais de 1000 animais</p>
+                    </div>
+                    <div class="statItem">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>Voluntários Ativos</h3>
+                        <p>+500 voluntários engajados em nossas ações</p>
+                    </div>
+                    <div class="statItem">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Cuidados Realizados</h3>
+                        <p>Mais de 100 cuidados sucedidos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="donationSection">
+        <div class="donationContainer">
+            <div class="donationHeader">
+                <h2>FAÇA SUA DOAÇÃO</h2>
+                <p class="donationTagline">Sua doação salva vidas marinhas!</p>
+            </div>
+            
+            <div class="donationOptions">
+                <div class="donationCard">
+                    <div class="donationAmount">R$ 20</div>
+                    <p>Ajuda com alimentação para 5 animais por uma semana</p>
+                    <button class="donateBtn">DOAR AGORA</button>
+                </div>
+                
+                <div class="donationCard featured">
+                    <div class="popularBadge">MAIS POPULAR</div>
+                    <div class="donationAmount">R$ 50</div>
+                    <p>Fornece medicamentos e tratamento básico para um animal</p>
+                    <button class="donateBtn">DOAR AGORA</button>
+                </div>
+                
+                <div class="donationCard">
+                    <div class="donationAmount">R$ 100</div>
+                    <p>Garante um mês de cuidados completos para um animal marinho</p>
+                    <button class="donateBtn">DOAR AGORA</button>
+                </div>
+                
+                <div class="customDonation">
+                    <div class="donationAmount">Outro Valor</div>
+                    <div class="customInput">
+                        <span>R$</span>
+                        <input type="number" min="1" placeholder="Digite o valor">
+                    </div>
+                    <button class="donateBtn">DOAR AGORA</button>
+                </div>
+            </div>
+            
+            <div class="donationInfo">
+                <div class="infoItem">
+                    <i class="fas fa-lock"></i>
+                    <span>Pagamento Seguro</span>
+                </div>
+                <div class="infoItem">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>Recibo para Dedução Fiscal</span>
+                </div>
+                <div class="infoItem">
+                    <i class="fas fa-heart"></i>
+                    <span>100% dos fundos para os animais</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="popup {% if category %}{{ category }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.popup');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.classList.add('fade-out');
+                    setTimeout(() => message.remove(), 300);
+                }, 3000);
+            });
+        });
+
+        let slideIndex = 1;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const videos = document.querySelectorAll('.video-slide');
+
+        function showSlides(n) {
+            if (n > slides.length) {
+                slideIndex = 1;
+            }
+            if (n < 1) {
+                slideIndex = slides.length;
+            }
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                dots[i].classList.remove("active");
+            }
+
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].classList.add("active");
+
+            const currentVideo = slides[slideIndex - 1].querySelector('video');
+            if (currentVideo) {
+                currentVideo.currentTime = 0;
+            }
+        }
+        function changeSlide(n) {
+            showSlides(slideIndex += n);
+        }
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => currentSlide(index + 1));
+        });
+        showSlides(slideIndex);
+        setInterval(() => {
+            changeSlide(1);
+        }, 8000);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeSlide(1);
+            }
+        });
+    </script>
+</body>
+</html>

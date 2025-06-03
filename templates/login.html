@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Golfinho Azul</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='features/logo1.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="oceanoHeader">
+        <nav class="navegacaoContainer">
+            <div class="logoContainer">
+                <a href="{{ url_for('index') }}" class="logoBtn" title="Return to Home">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar</span>
+                </a>
+            </div>
+            <div class="navegacaoButton">
+            {% if current_user.is_authenticated %}
+                <div class="profileDropdown">
+                    <button class="profileBtn" title="Profile Menu">
+                        <div class="profileIcon" style="--profile-color: {{ current_user.profile_color }}; --profile-color-dark: {{ current_user.profile_color }}"></div>
+                        Meu Perfil
+                    </button>
+                    <div class="dropdownContent">
+                        <a href="{{ url_for('login')}}">Dashboard</a>
+                        <a href="{{ url_for('alterar_dados') }}">Alterar Dados</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="navegacaoBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="navegacaoBtn"><i class="fas fa-user-plus"></i> Registrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="popup {% if category %}{{ category }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="loginPage">
+        <div class="loginContainer">
+            <div class="logoContainer">
+                <img src="{{ url_for('static', filename='features/logoblue.svg') }}" alt="Golfinho Azul Logo" class="logo">
+            </div>
+            <div class="loginBox">
+                <h2>Realizar Login</h2>
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="inputGroup">
+                        <input type="text" id="identifier" name="identifier" required aria-label="Email" title="Email ou Usuário">
+                        <label for="identifier">Email ou CPF</label>
+                    </div>
+                    <div class="inputGroup">
+                        <input type="password" id="password" name="password" required aria-label="Senha" title="Digite sua senha">
+                        <label for="password">Senha</label>
+                    </div>
+                    <button type="submit" class="loginBtn">Entrar</button>
+                </form>
+                <div class="registerLink">
+                    <p>Não tem uma conta? 
+                        <a href="{{ url_for('register') }}">Registre-se!</a>
+                    </p>
+                </div>
+                <div class="registerLink">
+                    <p><a href="{{ url_for('index') }}">Voltar para Página Inicial</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.inputGroup input');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value) {
+                        this.classList.add('filled');
+                    } else {
+                        this.classList.remove('filled');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.popup');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.classList.add('fade-out');
+                    setTimeout(() => message.remove(), 300);
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>

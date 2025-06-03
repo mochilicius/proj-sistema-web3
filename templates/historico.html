@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Doações</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='features/icon.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="popup {% if category %}{{ category }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <header class="oceanoHeader">
+        <nav class="navegacaoContainer">
+            <div class="logoContainer">
+                <a href="javascript:history.back()" class="logoBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>ALTERAR PARA A LOGO SER AQUI</span>
+                </a>
+            </div>
+            <div class="navegacaoButton">
+            {% if current_user.is_authenticated %}
+                <div class="profileDropdown">
+                    <button class="profileBtn">
+                        <div class="profileIcon" style="--profile-color: {{ current_user.profile_color }}; --profile-color-dark: {{ current_user.profile_color }}"></div>
+                        Meu Perfil
+                    </button>
+                    <div class="dropdownContent">
+                        <a href="{{ url_for('login')}}">Dashboard</a>
+                        <a href="{{ url_for('alterar_dados') }}">Alterar Dados</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="navegacaoBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="navegacaoBtn"><i class="fas fa-user-plus"></i> Registrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <div class="page-container">
+        <div class="container">
+            <h1>Minhas Doações</h1>
+            <div class="table-container">
+                <table id="tabelaDoacoes" class="defaultTable">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if not historico %}
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 20px;">
+                                    <div class="empty-message">Nenhuma doação registrada!</div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for doacao in historico %}
+                            <tr data-id="{{ doacao.id }}">
+                                <td>{{ doacao.status }}</td>
+                                <td>R${{ doacao.valor }}</td>
+                                <td>{{ doacao.created_at }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="popup {% if category %}{{ category }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

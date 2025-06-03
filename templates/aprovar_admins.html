@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovar Administradores - Golfinho Azul</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='features/icon.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="oceanoHeader">
+        <nav class="navegacaoContainer">
+            <div class="logoContainer">
+                <a href="javascript:history.back()" class="logoBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Voltar</span>
+                </a>
+            </div>
+            <div class="navegacaoButton">
+            {% if current_user.is_authenticated %}
+                <div class="profileDropdown">
+                    <button class="profileBtn">
+                        <div class="profileIcon" style="--profile-color: {{ current_user.profile_color }}; --profile-color-dark: {{ current_user.profile_color }}"></div>
+                        Meu Perfil
+                    </button>
+                    <div class="dropdownContent">
+                        <a href="{{ url_for('login')}}">Dashboard</a>
+                        <a href="{{ url_for('alterar_dados') }}">Alterar Dados</a>
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="navegacaoBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="{{ url_for('register') }}" class="navegacaoBtn"><i class="fas fa-user-plus"></i> Registrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+    <h1>Aprovar Administradores</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="popup {% if category %}{{ category }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="table-container">
+        <table class="defaultTable">
+            <thead>
+                <tr>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if admin_requests|length == 0 %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">
+                            <div class="empty-message">Nenhuma solicitação de admin pendente!</div>
+                        </td>
+                    </tr>
+                {% else %}
+                    {% for admin in admin_requests %}
+                    <tr>
+                        <td>{{ admin.id }}</td>
+                        <td>{{ admin.email }}</td>
+                        <td>{{ admin.name }}</td>
+                        <td>{{ admin.phone }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('aprovar_admins') }}" style="display: inline;">
+                                <input type="hidden" name="action" value="approve">
+                                <input type="hidden" name="admin_id" value="{{ admin.id }}">
+                                <button type="submit" class="btn btn-success">Aprovar</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('aprovar_admins') }}" style="display: inline;">
+                                <input type="hidden" name="action" value="reject">
+                                <input type="hidden" name="admin_id" value="{{ admin.id }}">
+                                <button type="submit" class="btn btn-danger">Rejeitar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+    </div>    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
